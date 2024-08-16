@@ -1,29 +1,44 @@
-const { newConnection } = require("../base_Datos/baseDatos")
+import { newConnection } from "../base_Datos/baseDatos.js";
+
 
 
 
 //seleccionar tarea
 async function obtenerTasks(req, res){
+try {
         const connection = await newConnection()
-        const [result] = await connection.query("SELECT * FROM tasks")
+        const result = await connection.query("SELECT * FROM tasks")
         res.json(result[0]);  
         connection.end()
-    }
+    
+} catch (error) {
+    res.sendStatus(500)
+}}
+
 
 
 //seleccionar tarea  por id
 async function obtenerId(req, res){
+    try {
         const connection = await newConnection()
 
         const id = req.params.id
         const result = await connection.query("SELECT * FROM tasks where id = ?", id)
 
         res.json(result[0]);  
-        connection.end()
+        connection.end()  
+    } catch (error) {
+        res.sendStatus(500)
+    }  
     }
 
-//agregar tareas
+// agregar tareas
 async function agregarTasks(req, res){
+    try {
+        
+    } catch (error) {
+        
+    }
     const connection = await newConnection()
 
     const {title, description, isComplete} = req.body
@@ -34,31 +49,44 @@ async function agregarTasks(req, res){
     connection.end()
 }
 
+
+
+
 //editar tarea por id 
 async function editarPorId(req, res){
-    const connection = await newConnection()
-    const id = req.params.id
-    const {title, description, isComplete} = req.body
-    await connection.query("UPDATE tasks SET `title`=?,`description`=?,`isComplete`=? WHERE id = ?", [title, description, isComplete, id])
-
-    res.json({msg: "Se actualizó la base de datos correctamente"}) 
+    try {
+        const connection = await newConnection()
+        const id = req.params.id
+        const {title, description, isComplete} = req.body
+        await connection.query("UPDATE tasks SET `title`=?,`description`=?,`isComplete`=? WHERE id = ?", [title, description, isComplete, id])
     
-    connection.end()
-}
+        res.json({msg: "Se actualizó la base de datos correctamente"}) 
+        
+        connection.end()
+    
+    } catch (error) {
+        res.sendStatus(500)
+    }}
+
 
 //eliminar tarea por id
 async function eliminarId(req, res){
-    const connection = await newConnection()
+    try {
+        const connection = await newConnection()
 
     const id = req.params.id
     const result = await connection.query("DELETE FROM tasks where id = ?", id)
 
     res.json({msg: "Se eliminó correctamente"}) 
     connection.end()
+    } catch (error) {
+        res.sendStatus(500)
+    }
+    
 }
 
 
-    module.exports = {
+    export {
         obtenerTasks,
         obtenerId,
         agregarTasks,

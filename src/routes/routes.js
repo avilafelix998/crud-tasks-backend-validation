@@ -1,12 +1,16 @@
-const { Router } = require('express');
+import { Router } from 'express';
 const router = Router()
-const {obtenerTasks, obtenerId, agregarTasks, eliminarId, editarPorId} = require("../controladores/controllers")
+import {obtenerTasks, obtenerId, agregarTasks, eliminarId, editarPorId} from "../controladores/controllers.js"
+import {aplicarValidaciones} from "../validation/validationsResult.js"
+import {tasksValidation} from "../validation/validationIndex.js"
 
-
-router.get("/tasks/:id", obtenerId )
-router.put("/tasks/:id", editarPorId)
 router.get("/tasks", obtenerTasks)
-router.post("/tasks",agregarTasks)
+router.get("/tasks/:id", obtenerId )
+router.put("/tasks/:id",tasksValidation,aplicarValidaciones, 
+editarPorId)
+router.post("/tasks",tasksValidation,aplicarValidaciones,agregarTasks)
 router.delete("/tasks/:id", eliminarId)
 
-module.exports = router
+export{
+    router
+} 
